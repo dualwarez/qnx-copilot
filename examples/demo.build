@@ -1,0 +1,21 @@
+# demo.build — sample QNX 8.0 buildfile used by `qx doctor examples/demo.build`
+# Shows the grammar QNX Copilot parses: image attrs, modules, env vars,
+# file entries with {host source} blocks and [perms=...] overrides.
+
+[image=usb]
+<bin>
+PATH=/bin:/usr/bin:/sbin
+LD_LIBRARY_PATH=/usr/lib:/usr/lib/dll
+
+# core runtime
+/proc/boot/libc.so.5={QNX_TARGET/x86_64/lib/libc.so.5}
+/sbin/qconn={QNX_TARGET/x86_64/sbin/qconn}
+/bin/esh={QNX_TARGET/x86_64/bin/esh}
+
+# our demo service
+/usr/bin/hello-daemon={build/x86_64/hello-daemon}
+/etc/rc.d/rc.local={scripts/rc.local}
+
+# dev conveniences
+/bin/cat=[perms=rwxr-xr-x] {QNX_TARGET/x86_64/bin/cat}
+/usr/share/welcome={assets/welcome.txt}
