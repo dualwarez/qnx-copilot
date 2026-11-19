@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qnx-copilot"
+version = "0.1.0"
+description = "AI-powered build & run companion for QNX 8.0 projects"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Dhananjay Singh" }]
+dependencies = []
+
+[project.scripts]
+qx = "qnxcp.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["qnxcp*"]
