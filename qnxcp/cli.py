@@ -10,6 +10,7 @@ from .parser import parse_buildfile
 from .doctor import diagnose, summarize, RULE_COUNT
 from .run import run_image
 from .ai import explain
+from .build import run_build
 
 
 def main(argv=None):
@@ -34,6 +35,12 @@ def main(argv=None):
     p_exp.add_argument("error", help="error text or '-' to read stdin")
     p_exp.add_argument("--ai", action="store_true", help="also ask an LLM (needs API key)")
 
+    p_bld = sub.add_parser("build", help="run mkqnximage with structured error diagnosis")
+    p_bld.add_argument("buildfile", help="path to *.build")
+    p_bld.add_argument("--out", default="images", help="output dir for the image")
+    p_bld.add_argument("--arch", default="x86_64", choices=["x86_64", "aarch64"])
+    p_bld.add_argument("extra", nargs="*", help="extra args passed to mkqnximage")
+
     sub.add_parser("codelab", help="generate a codelab skeleton for the current project")
 
     args = ap.parse_args(argv)
@@ -57,6 +64,9 @@ def main(argv=None):
     elif args.cmd == "explain":
         text = sys.stdin.read() if args.error == "-" else args.error
         print(explain(text, use_ai=args.ai))
+
+    elif args.cmd == "build":
+        run_build(args.buildfile, args.out, args.arch, args.extra)
 
     elif args.cmd == "codelab":
         from .codelab import generate
