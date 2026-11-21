@@ -90,7 +90,7 @@ The full chain was executed live and automated:
 
 1. myQNX account registration + activation (email confirm refnum flow)
 2. Non-commercial license: agreement accepted + deployed in License Manager ("Deployed")
-3. QNX Software Center 2.0.4 silent install ()
+3. QNX Software Center 2.0.4 silent install (--unattended flag)
 4. License key activated via CLI: 3H0V-N9E3-XX0U-R3TF-32T6 → "Activated"
 5. SDP 8.0 baseline installed: com.qnx.qnx800 → C:/QNX800 (4.7 GB) + QEMU support packages
 6. `qcc -V` → 12.2.0 gcc_nto targets; mkifs / mkqnx6fsimg / mkqnximage all live
