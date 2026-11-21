@@ -1,4 +1,12 @@
-# QNX Copilot 🚗⚡
+# QNX Copilot
+
+![QNX 8.0 booted in QEMU](docs/qnx-boot-screenshot.png)
+
+**✅ Verified live:** real QNX SDP 8.0 license activated → SDP installed (4.7 GB) →
+OS image built with mkqnximage → **QNX Neutrino 8.0.0 booted in QEMU** — serial boot log
+in [docs/qnx-boot-serial.log](docs/qnx-boot-serial.log), full evidence in
+[docs/QNX-EVIDENCE.md](docs/QNX-EVIDENCE.md), 55s walkthrough in
+[docs/qnx-copilot-demo.mp4](docs/qnx-copilot-demo.mp4). 🚗⚡
 
 **AI-powered build & run companion for QNX 8.0 projects** — because real-time OS tooling shouldn't feel like it's from 1985.
 
