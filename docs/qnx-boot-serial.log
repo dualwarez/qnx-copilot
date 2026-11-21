@@ -1,0 +1,30 @@
+
+non UEFI or UEFI+CSM boot
+ACPI table not found (0x4746434d)
+System behaves poorly without PCID support.
+overriding mask for controller 2, vector_base 0
+---> Starting slogger2
+---> Starting PCI Services
+---> Starting fsevmgr
+# ---> Starting devb
+---> Mounting file systems
+Path=0 - Intel 82371SB
+---> Mounting file systems
+ target=0 lun=0     Direct-Access(0) -          QEMU HARDDISK    Rev: 2.5+
+Path=1 - Intel 82371SB
+ target=0 lun=0            CD-ROM(5) - QEMU     QEMU DVD-ROM     Rev: 2.5+
+No fstab entries found for type /boot
+/proc/boot/mount_fs.sh[54]: /system/bin/cleanup_tmp: cannot execute - No such file or directory
+---> Starting Networking
+if_up: tries exhausted
+ifconfig: interface vtnet0 does not exist
+read_config: /system/etc/dhcpcd/dhcpcd.conf: No such file or directory
+no valid interfaces found
+---> Starting sshd
+---> Starting misc
+
+To exit QEMU, type <ctrl>a x
+
+[?7hProcess count:22
+Startup complete
+QNX noname 8.0.0 2026/10/30-09:10:05EDT x86pc x86_64
