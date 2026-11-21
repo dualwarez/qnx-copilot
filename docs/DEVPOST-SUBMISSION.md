@@ -82,3 +82,20 @@ docs/CODELAB.md documents the full SDP + QEMU flow.
 - **Innovation & AI Creativity** — first AI-native assistant for QNX build
   artifacts; hybrid deterministic-first design means it never hallucinates a
   buildfile fix when the KB knows the answer.
+
+
+## QNX 8.0 E2E Evidence (Nov 21) — REAL, not mocked
+
+The full chain was executed live and automated:
+
+1. myQNX account registration + activation (email confirm refnum flow)
+2. Non-commercial license: agreement accepted + deployed in License Manager ("Deployed")
+3. QNX Software Center 2.0.4 silent install ()
+4. License key activated via CLI: 3H0V-N9E3-XX0U-R3TF-32T6 → "Activated"
+5. SDP 8.0 baseline installed: com.qnx.qnx800 → C:/QNX800 (4.7 GB) + QEMU support packages
+6. `qcc -V` → 12.2.0 gcc_nto targets; mkifs / mkqnx6fsimg / mkqnximage all live
+7. `mkqnximage --boot-mode=qemu --clean --force` → disk-qemu.vmdk + ifs.bin built
+8. `qemu-system-x86_64 -kernel ifs.bin -drive disk-qemu.vmdk,if=ide` →
+   **Startup complete — QNX noname 8.0.0 x86_64** (serial log + screenshot in docs/)
+
+See docs/QNX-EVIDENCE.md — this is the same flow QNX Copilot automates.
