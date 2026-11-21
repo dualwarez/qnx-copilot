@@ -24,7 +24,16 @@ IMAGE_CANDIDATES = [
     "images/qnx-image.img",
     "ifs/qnx-image.img",
     "qnx-ifs",
+    "output/ifs.bin",          # mkqnximage --boot-mode=qemu output
     "ifs.bin",
+    "output/disk-qemu.vmdk",   # ide disk paired with the IFS
+    "disk-qemu.vmdk",
+]
+
+DISK_CANDIDATES = [
+    "output/disk-qemu.vmdk",
+    "disk-qemu.vmdk",
+    "output/disk-qemu",
 ]
 
 
@@ -53,20 +62,40 @@ def build_command(arch: str, image: Path, memory: str, forward: str | None, uefi
     cmd = [
         qemu_binary(arch),
         "-m", memory,
-        "-serial", "stdio",
-        "-display", "none" if platform.system() != "Windows" else "sdl",
+        "-smp", "2",
+        "-cpu", "max",
     ]
     if arch == "x86_64":
-        cmd += ["-drive", f"file={image},format=raw,if=virtio"]
-        cmd += ["-netdev", f"user,id=n0{',hostfwd=tcp::' + forward if forward else ''}", "-device", "virtio-net,netdev=n0"]
+        # Verified live QNX 8.0 boot recipe (see docs/QNX-EVIDENCE.md):
+        #   -kernel <ifs.bin>  (multiboot IFS is the boot payload)
+        #   -drive disk-qemu.vmdk,if=ide  (system/data partitions)
+        cmd += ["-kernel", str(image)]
+        disk = find_disk(image.parent)
+        if disk:
+            cmd += ["-drive", f"file={disk},if=ide"]
+        cmd += ["-display", "none" if platform.system() != "Windows" else "sdl"]
+        cmd += ["-serial", "file:serial_out.txt" if platform.system() == "Windows" else "stdio"]
+        if forward:
+            cmd += ["-netdev", f"user,id=n0,hostfwd=tcp::{forward}", "-device", "virtio-net-pci,netdev=n0"]
         if uefi:
             cmd += ["-bios", "OVMF.fd"]
     else:
         cmd += ["-M", "virt", "-cpu", "cortex-a57", "-nographic"]
-        cmd += ["-drive", f"file={image},format=raw,if=virtio"]
+        cmd += ["-kernel", str(image)]
         if forward:
             cmd += ["-netdev", f"user,id=n0,hostfwd=tcp::{forward}", "-device", "virtio-net-pci,netdev=n0"]
     return cmd
+
+
+def find_disk(root: Path) -> Path | None:
+    for name in DISK_CANDIDATES:
+        p = root / name if not name.startswith("output/") else root.parent / name
+        if p.is_file():
+            return p
+        p2 = root / name
+        if p2.is_file():
+            return p2
+    return None
 
 
 def run_image(root: Path, arch: str = "x86_64", memory: str = "512M", forward: str | None = None, uefi: bool = False):

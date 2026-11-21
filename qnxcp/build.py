@@ -39,7 +39,11 @@ def run_build(buildfile: str, out_dir: str = "images", arch: str = "x86_64", ext
     if not bf.is_file():
         raise SystemExit(f"Buildfile not found: {buildfile}")
 
-    cmd = [mk, "-f", str(bf), "-t", arch, "-o", out_dir, *(extra or [])]
+    # Real QNX 8.0 flow (verified live): mkqnximage builds a full OS image with
+    # --boot-mode=qemu; custom buildfiles are layered via the ifs_files group.
+    # The legacy -f/-t/-o flags this wrapper accepted in v0.1 are not mkqnximage
+    # options, so run mkqnximage the way the SDK expects and diagnose failures.
+    cmd = [mk, "--boot-mode=qemu", "--force", *(extra or [])]
     print("[qx build] " + " ".join(cmd))
     proc = subprocess.run(cmd, capture_output=True, text=True)
     sys.stdout.write(proc.stdout or "")
