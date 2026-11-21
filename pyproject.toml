@@ -12,6 +12,9 @@ license = { text = "MIT" }
 authors = [{ name = "Dhananjay Singh" }]
 dependencies = []
 
+[project.optional-dependencies]
+dev = ["pytest"]
+
 [project.scripts]
 qx = "qnxcp.cli:main"
 
